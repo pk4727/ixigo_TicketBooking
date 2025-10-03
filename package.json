@@ -1,0 +1,19 @@
+{
+  "name": "ixigo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "headed": "npx playwright test --headed",
+    "headless": "npx playwright test",
+    "UI": "npx playwright test --ui",
+    "individual file": "npx playwright test example"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^24.6.2"
+  }
+}
