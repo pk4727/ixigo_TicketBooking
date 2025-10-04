@@ -14,8 +14,8 @@ export class SearchPage {
     private readonly bookingForSelector = "div[class='px-20 z-20 flex justify-between items-center relative'] li";
     private readonly searchSelector = '[data-testid="book-train-tickets"]';
 
-    private readonly fromDropdown = '[data-testid="popular-stations"] p'
-    private readonly toDropdown = '[class="absolute z-20 top-[175px] left-[420px]"] p'
+    private readonly Dropdown = '[role="listitem"] p'
+    
 
     constructor(page: Page) {
         this.page = page;
@@ -24,8 +24,8 @@ export class SearchPage {
 
         this.typeLocationFrom = this.page.getByPlaceholder("Enter Origin");
         this.typeLocationTo = this.page.getByPlaceholder("Enter Destination");
-        this.selectLocationFrom = this.page.locator(this.fromDropdown).first();
-        this.selectLocationTo = this.page.locator(this.toDropdown).first();
+        this.selectLocationFrom = this.page.locator(this.Dropdown).nth(3);
+        this.selectLocationTo = this.page.locator(this.Dropdown).nth(3);
     }
 
     async navigate(): Promise<void> {
@@ -34,12 +34,19 @@ export class SearchPage {
     }
 
     async fillJourneyDetails(from: string, to: string, date: string): Promise<void> {
-        await this.typeLocationFrom.pressSequentially(from, { delay: 100 });
-        await this.page.waitForSelector(this.fromDropdown);
+        await this.typeLocationFrom.hover();
+        await this.typeLocationFrom.click();
+        await this.typeLocationFrom.pressSequentially(from, { delay: 1000 });
+        await this.page.waitForSelector(this.Dropdown);
+        await this.selectLocationFrom.hover();
         await this.selectLocationFrom.click();
 
+        await this.typeLocationTo.hover();
+        await this.typeLocationTo.click();
         await this.typeLocationTo.fill(to);
         await this.selectLocationTo.click();
+
+        
     }
 
     async clickSearch(): Promise<void> {
