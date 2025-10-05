@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { time } from 'console';
 
 export class SearchPage {
     private page: Page;
@@ -33,10 +34,10 @@ export class SearchPage {
         await this.bookingForTrain.click();
     }
 
-    async fillJourneyDetails(from: string, to: string, date: string): Promise<void> {
+    async fillJourneyDetails(from: string, to: string, date: number, month: number, tatkal: boolean): Promise<void> {
         await this.typeLocationFrom.hover();
         await this.typeLocationFrom.click();
-        await this.typeLocationFrom.pressSequentially(from, { delay: 1000 });
+        await this.typeLocationFrom.pressSequentially(from, { delay: 100 });
         await this.page.waitForSelector(this.Dropdown);
         await this.selectLocationFrom.hover();
         await this.selectLocationFrom.click();
@@ -45,7 +46,14 @@ export class SearchPage {
         await this.typeLocationTo.click();
         await this.typeLocationTo.fill(to);
         await this.selectLocationTo.click();
-
+        //------------------------------------------------------------------------------
+        // Wait for calendar and select date
+        if(tatkal){
+            await this.page.locator('[data-testid="tomorrow"]').click();
+        }else{
+            await this.page.waitForSelector('[data-testid="calendar"]');
+            await this.page.getByRole('button',{name: `${date}`}).nth(month).click();
+        }
         
     }
 
