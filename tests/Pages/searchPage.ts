@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { time } from 'console';
 
 export class SearchPage {
     private page: Page;
