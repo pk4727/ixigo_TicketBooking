@@ -6,5 +6,4 @@ test('Search train between two cities', async ({ page }) => {
     await searchPage.navigate();
     await searchPage.fillJourneyDetails("Patna", "Ranchi");
     await searchPage.clickSearch();
-    await page.pause();
 });
