@@ -5,12 +5,12 @@ import { PassengersDetails } from '../Pages/passengersDetails';
 
 let searchPage: SearchPage;
 let selectedTrain: TrainSelection;
-let contact: PassengersDetails;
+let passenger: PassengersDetails;
 
 test('Start to End process', async ({ page }) => {
     searchPage = new SearchPage(page);
     selectedTrain = new TrainSelection(page);
-    contact = new PassengersDetails(page);
+    passenger = new PassengersDetails(page);
 
     await searchPage.navigate();
     await searchPage.fillJourneyDetails("Pune Jn (PUNE)", "New Delhi (NDLS)", 'tomorrow');
@@ -18,7 +18,7 @@ test('Start to End process', async ({ page }) => {
 
     await selectedTrain.selectTrainDetails();
 
-    await contact.selectMemberFromList("Pradhuman kumar");
-    await contact.addNewMemberDetails("Gaurav sharma", "24", "Male");
-    await contact.selectMemberFromList("Gaurav sharma");
+    await passenger.selectMemberFromList("Pradhuman kumar");
+    await passenger.addNewMemberDetails("Gaurav sharma", "24", "Male");
+    await passenger.selectMemberFromList("Gaurav sharma");
 });
