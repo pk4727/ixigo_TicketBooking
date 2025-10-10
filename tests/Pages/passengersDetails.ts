@@ -19,7 +19,7 @@ export class PassengersDetails {
     private dilogBoxLocator: Locator;
 
     // Selector constants
-    private readonly dilogBoxSelector = 'div[role="dialog"] [data-testid="fc-popup"]';
+    private readonly dilogBoxSelector = 'fc-popup-no' // 'div[role="dialog"] [data-testid="fc-popup"]';
 
     constructor(page: Page) {
         this.page = page;
@@ -37,20 +37,20 @@ export class PassengersDetails {
 
         this.freeCancellation = this.page.locator('label').filter({ hasText: "No, I don't want free Cancellation" });
         this.reviewAndPayButton = this.page.getByTestId('review-and-pay'); // 'button[data-testid="review-and-pay"]';
-        this.dilogBoxLocator = this.page.locator(this.dilogBoxSelector);
+        this.dilogBoxLocator = this.page.getByTestId(this.dilogBoxSelector);
     }
 
     async navigate(): Promise<void> {
-        await this.page.goto('/trains/booking/11077/PUNE/NDLS/09102025/SL/TQ');
+        await this.page.goto('/trains/booking/11077/PUNE/NDLS/10102025/SL/TQ');
     }
 
     async selectMemberFromList(memberName: string): Promise<void> {
         const member = this.membersList.filter({ hasText: memberName });
         await expect(member).toBeVisible();
 
-        const isSelected = await member.getByRole('checkbox').isChecked();
+        const isSelected = await member.locator('input[type="checkbox"]').isChecked();
         if (!isSelected) {
-            await member.click();
+            await member.locator('input[type="checkbox"]').click();
         }
     }
 
@@ -91,17 +91,16 @@ export class PassengersDetails {
     }
 
     async otherDetailsAndPay(): Promise<void> {
-        if (!this.freeCancellation.isChecked()) {
+        const ischeckedFreeCancellation = await this.freeCancellation.isChecked();
+        if (!ischeckedFreeCancellation) {
             await this.freeCancellation.click();
         }
         await this.reviewAndPayButton.click();
 
-        // Handle dialog if it appears
-        // @ts-ignore
-        if (await this.dilogBoxLocator.isVisible()) {
-            this.page.on('dialog', async dialog => {
-                await dialog.dismiss();
-            });
+        await this.page.waitForTimeout(1000);
+        const dilog = await this.dilogBoxLocator.isVisible();
+        if (dilog) {
+            await this.dilogBoxLocator.click();
         }
     }
 }

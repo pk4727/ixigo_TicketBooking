@@ -12,6 +12,9 @@ export class SearchPage {
     private tomorrow: Locator;
     private dayAfterTomorrow: Locator;
     private search: Locator;
+    private iframe: any;
+    private popover: Locator;
+    private isPopoverVisible: boolean;
 
     // Selector constants/Path
     private readonly bookingForSelector = "div[class='px-20 z-20 flex justify-between items-center relative'] li";
@@ -19,6 +22,8 @@ export class SearchPage {
     private readonly tomorrowLocator = '[data-testid="tomorrow"]';
     private readonly dayAfterTomorrowLocator = '[data-testid="day-after-tomorrow"]';
     private readonly searchSelector = '[data-testid="book-train-tickets"]';
+    private readonly iframeSelector = '#wiz-iframe-intent';
+    private readonly popoverClose = "#closeButton";
 
     constructor(page: Page) {
         this.page = page;
@@ -31,6 +36,9 @@ export class SearchPage {
         this.tomorrow = page.locator(this.tomorrowLocator);
         this.dayAfterTomorrow = page.locator(this.dayAfterTomorrowLocator);
         this.search = page.locator(this.searchSelector);
+
+        this.iframe = page.frameLocator(this.iframeSelector);
+        this.popover = this.iframe.locator(this.popoverClose);
     }
 
     /**
@@ -39,8 +47,16 @@ export class SearchPage {
     async navigate(): Promise<void> {
         await this.page.goto('/');
         await this.bookingForTrain.click();
+        await this.page.waitForTimeout(1000);
     }
 
+    async closePopover(): Promise<void> {
+        await this.page.waitForTimeout(1000);
+        this.isPopoverVisible = await this.popover.isVisible();
+        if (this.isPopoverVisible) {
+            await this.popover.click();
+        }
+    }
     /**
      * Fills journey details including origin, destination, and travel date.
      * @param from - Origin station
@@ -48,14 +64,20 @@ export class SearchPage {
      * @param travelDate - 'tomorrow' or 'dayAfterTomorrow'
      */
     async fillJourneyDetails(from: string, to: string, travelDate: 'tomorrow' | 'dayAfterTomorrow' = 'dayAfterTomorrow'): Promise<void> {
+        // if popover appears, close it
+        await this.closePopover();
         await this.typeLocationFrom.click();
+        await this.closePopover();
         await this.typeLocationFrom.fill(from);
+        await this.closePopover();
         await this.selectStation.click();
+        await this.closePopover();
 
         // await this.typeLocationTo.click();
         await this.typeLocationTo.fill(to);
+        await this.closePopover();
         await this.selectStation.click();
-
+        await this.closePopover();
         if (travelDate === 'tomorrow') {
             await this.tomorrow.click();
         } else {

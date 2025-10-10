@@ -25,13 +25,16 @@ export class TrainSelection {
     private readonly availableTextSelector = '.avail-text';
     private readonly bookButtonSelector = '.book-btn button';
 
-    constructor(page: Page) {
+    /**
+    * @param trainNoFromList - 'Train number from the list that have availability'
+    */
+    constructor(page: Page, trainNoFromList: number = 1) {
         this.page = page;
 
         // Initialize static locators
         this.selectTatkal = page.locator(this.tatkalRadioSelector);
         this.trainList = page.locator(this.trainSelector);
-        this.selectedTrain = this.trainList.nth(2); // third train
+        this.selectedTrain = this.trainList.nth(trainNoFromList - 1); // third train
         this.selectClass = this.selectedTrain.locator(this.classesItemSelector).first();
         this.availabilty = this.selectedTrain.locator(this.availabilityTextSelector).first();
         this.availabilityCountLocator = this.selectedTrain.locator(`${this.trainStatusSelector} ${this.availabilityCountSelector}`);
@@ -49,7 +52,7 @@ export class TrainSelection {
         await this.selectTatkal.click();
         await this.page.waitForLoadState('networkidle');
 
-        // await expect(this.availabilty).toContainText('Available'); // not use if watting list start
+        await expect(this.availabilty).toContainText('Available'); // not use if watting list start
         await this.selectClass.waitFor({ state: 'visible' });
         await this.selectClass.click();
 
