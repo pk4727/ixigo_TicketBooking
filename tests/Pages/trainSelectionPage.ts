@@ -52,7 +52,7 @@ export class TrainSelection {
         await this.selectTatkal.click();
         await this.page.waitForLoadState('networkidle');
 
-        await expect(this.availabilty).toContainText('Available'); // not use if watting list start
+        // await expect(this.availabilty).toContainText('Available'); // not use if watting list start
         await this.selectClass.waitFor({ state: 'visible' });
         await this.selectClass.click();
 

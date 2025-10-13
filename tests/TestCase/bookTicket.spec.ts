@@ -14,11 +14,11 @@ let payment: PaymentPage;
 
 test('Start to End process', async ({ page }) => {
     searchPage = new SearchPage(page);
-    selectedTrain = new TrainSelection(page, 4);
+    selectedTrain = new TrainSelection(page, 1);
     passenger = new PassengersDetails(page);
     payment = new PaymentPage(page);
     await searchPage.navigate();
-    await searchPage.fillJourneyDetails("Pune Jn (PUNE)", "New Delhi (NDLS)", 'tomorrow');
+    await searchPage.fillJourneyDetails("Pune Jn (PUNE)", "Ranchi (RNC)", 'tomorrow');
     await searchPage.clickSearch();
     await selectedTrain.selectTrainDetails();
     await passenger.selectMemberFromList("Pradhuman kumar");
