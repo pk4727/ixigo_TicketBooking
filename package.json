@@ -8,6 +8,7 @@
     "clean:screenshots": "rimraf screenshots",
     "clean:all": "npm run clean:reports && npm run clean:videos && npm run clean:screenshots",
     "pretest":"npm install && ./.bin/playwright.cmd install --force && npm run clean:all",
+    "install": "npx playwright install",
     "headed": "npx playwright test --headed",
     "headless": "npx playwright test",
     "UI": "npx playwright test --ui",
