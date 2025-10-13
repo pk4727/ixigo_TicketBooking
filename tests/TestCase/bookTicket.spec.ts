@@ -9,9 +9,12 @@ let selectedTrain: TrainSelection;
 let passenger: PassengersDetails;
 let payment: PaymentPage;
 
+// To run jenkins server use below command
+//java -jar jenkins.war --httpPort=7000
+
 test('Start to End process', async ({ page }) => {
     searchPage = new SearchPage(page);
-    selectedTrain = new TrainSelection(page, 2);
+    selectedTrain = new TrainSelection(page, 4);
     passenger = new PassengersDetails(page);
     payment = new PaymentPage(page);
     await searchPage.navigate();

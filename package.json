@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "clean:reports": "rimraf test-results",
+    "clean:videos": "rimraf videos",
+    "clean:screenshots": "rimraf screenshots",
+    "clean:all": "npm run clean:reports && npm run clean:videos && npm run clean:screenshots",
+    "pretest":"npm install && ./.bin/playwright.cmd install --force && npm run clean:all",
     "headed": "npx playwright test --headed",
     "headless": "npx playwright test",
     "UI": "npx playwright test --ui",
